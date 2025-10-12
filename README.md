@@ -1,7 +1,7 @@
 
 🚀 Overview
 
-Flow is designed for professionals and students, who want to save time through automation without relying on third-party SaaS tools.
+Flow is designed for students, who want to save time through automation without relying on third-party SaaS tools.
 
 
 ✨ Features
