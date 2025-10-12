@@ -4,7 +4,7 @@
 Flow is designed for professionals and students, who want to save time through automation without relying on third-party SaaS tools.
 
 
-✨ Core Features
+✨ Features
 > Automatically scans job boards or company career pages
 
 > Filters by keywords, location, and posting date
