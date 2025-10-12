@@ -9,7 +9,7 @@ Flow is designed for professionals and students, who want to save time through a
 
 > Filters by keywords, location, and posting date
 
-> Monitors rental listing pages based on location, price, and bedrooms
+> Check if a website is up
 
 > University tracker application
 
@@ -18,6 +18,8 @@ Flow is designed for professionals and students, who want to save time through a
 > Merges multiple PDF files into one
 
 > Creates compressed backups with timestamps
+
+> Share Wifi Qr Code 
 
 > Converts between CSV and Excel formats interactively
 
