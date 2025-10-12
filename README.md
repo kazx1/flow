@@ -14,8 +14,6 @@ Flow is designed for professionals and students, who want to save time through a
 🏠 Property Finder
 > Monitors rental listing pages based on location, price, and bedrooms
 
-> Avoids duplicates and logs new listings automatically
-
 🎓 Students
 > University tracker application
 
