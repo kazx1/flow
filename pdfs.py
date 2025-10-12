@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-
-"""
-Usage:
-  python merge_pdfs.py input1.pdf input2.pdf [input3.pdf ...] output.pdf
-  python merge_pdfs.py /path/to/folder output.pdf
-  python merge_pdfs.py --recursive /path/to/folder output.pdf
-"""
 
 import argparse 
 import sys
