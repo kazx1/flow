@@ -10,13 +10,14 @@ Flow is designed for professionals and students, who want to save time through a
 > Automatically scans job boards or company career pages
 
 > Filters by keywords, location, and posting date
- 
-> Optional Slack or email notifications for new roles
 
 🏠 Property Finder
 > Monitors rental listing pages based on location, price, and bedrooms
 
 > Avoids duplicates and logs new listings automatically
+
+🎓 Students
+> University tracker application
 
 🗂️ File Utilities
 > Organizes downloads and documents by file type
