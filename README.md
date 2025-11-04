@@ -5,9 +5,6 @@ Flow is designed for students, who want to save time through automation without 
 
 
 ✨ Features
-> Automatically scans job boards or company career pages
-
-> Filters by keywords, location, and posting date
 
 > Check if a website is up
 
