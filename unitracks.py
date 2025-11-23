@@ -16,10 +16,8 @@ Run: python uni_tracker_interactive.py
 
 import csv, os, datetime as dt
 
-# === Config ===
 CSV_PATH = os.getenv("uniapplications", "myuniversity.csv")
 
-# === Final headers exactly as you want them in Excel ===
 FIELDS = [
     "id",
     "University", "Program", "Degree",
@@ -34,44 +32,42 @@ STATUS_CHOICES = [
     "Planning","In-Progress","Submitted","Interview","Offer","Accepted","Rejected","Waitlisted","Withdrawn"
 ]
 
-# ---------- utilities ----------
-
 def now_iso():
-    return dt.datetime.now().strftime("%Y-%m-%d %H:%M") #get current date & time
+    return dt.datetime.now().strftime("%Y-%m-%d %H:%M") 
 
-def ensure_csv(): #create csv file with headers
-    if not os.path.exists(CSV_PATH): #checks if file exists
-        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f: #opens csv file in write mode
-            w = csv.DictWriter(f, fieldnames=FIELDS) #prepare csv headers with our fields
-            w.writeheader() #write these fields headers
+def ensure_csv():
+    if not os.path.exists(CSV_PATH):
+        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=FIELDS)
+            w.writeheader()
 
-def load_rows(): #load all rows from csv file into a list of dict
-    ensure_csv() #make sure csv exists before reading
+def load_rows():
+    ensure_csv()
     with open(CSV_PATH, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f)) #each row becomes a dict
+        return list(csv.DictReader(f))
 
 def save_rows(rows):
     with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         for r in rows:
-            clean = {k: r.get(k, "") for k in FIELDS}  # drop unknown keys like "Major"
+            clean = {k: r.get(k, "") for k in FIELDS} 
             w.writerow(clean)
 
 
-def next_id(rows): #get next if by checking rows
-    mx = 0 #starting from 0
+def next_id(rows): 
+    mx = 0 
     for r in rows:
         try:
-            mx = max(mx, int(r.get("id","0"))) #convert id to int and find max
+            mx = max(mx, int(r.get("id","0"))) 
         except:
-            pass #skip invalid or empty IDs
-    return str(mx + 1) #return number as string
+            pass 
+    return str(mx + 1)
 
 def parse_money(x: str) -> float:
-    x = (x or "").strip() #remove spaces or none
+    x = (x or "").strip()
     if x == "": return 0.0
-    for ch in ", €$£₤₺₹¥₩": #remove any currency symbols or commas
+    for ch in ", €$£₤₺₹¥₩":
         x = x.replace(ch, "")
     try:
         return float(x)
@@ -79,14 +75,14 @@ def parse_money(x: str) -> float:
         return 0.0
 
 def usd(v: str | float) -> str:
-    """Format a number as USD string, e.g., $12,345.67."""
+    """Format a number as USD string: $12,345.67."""
     try:
         f = float(v)
-        return f"${f:,.2f}" #adds commas and 2 decimal places
+        return f"${f:,.2f}" 
     except:
         return "$0.00"
 
-def fmt_row_line(r: dict) -> str: #compact summary
+def fmt_row_line(r: dict) -> str:
     parts = [
         f"#{r.get('id','')}",
         r.get("University",""),
@@ -99,18 +95,18 @@ def fmt_row_line(r: dict) -> str: #compact summary
         f"status={r.get('Status','')}",
         f"total/yr={usd(r.get('Total year','0'))}",
     ]
-    return " | ".join(p for p in parts if p) #join everything with separators
+    return " | ".join(p for p in parts if p) 
 
 def input_def(prompt, default=""): 
     msg = f"{prompt} [{default}]: " if default else f"{prompt}: "
-    val = input(msg).strip() #get user input
-    return val if val else default #return input or default if blank
+    val = input(msg).strip() 
+    return val if val else default 
 
-def find_by_university(rows, uni): #returns all rows where University matches (lowercase)
+def find_by_university(rows, uni):
     u = (uni or "").strip().lower() 
     return [r for r in rows if r.get("University","").strip().lower() == u]
 
-def is_exact_duplicate(rows, uni, program, degree, term): #find exact duplicates 
+def is_exact_duplicate(rows, uni, program, degree, term):  
     u = (uni or "").strip().lower()
     p = (program or "").strip().lower()
     d = (degree or "").strip().lower()
@@ -121,19 +117,17 @@ def is_exact_duplicate(rows, uni, program, degree, term): #find exact duplicates
             r.get("Program","").strip().lower()==p and
             r.get("Degree","").strip().lower()==d and
             r.get("Term","").strip().lower()==t):
-            hits.append(r) #adds duplicates to the list
-    return hits #return list (empty, or contaning 1+ duplicates)
+            hits.append(r)
+    return hits
 
 def compute_estimate(tuition, living, scholarship):
-    return max(0.0, tuition + living - scholarship) #calcul yearly total
-
-# ---------- main interactive flow ----------
+    return max(0.0, tuition + living - scholarship)
 
 def add_new_row(rows, base_defaults=None):
     """Create a brand-new row (optionally prefill some fields)."""
-    r = {k:"" for k in FIELDS} #create empty row with all columns
-    r["id"] = next_id(rows) #assign next available ID
-    base_defaults = base_defaults or {} #default if not provided
+    r = {k:"" for k in FIELDS}
+    r["id"] = next_id(rows)
+    base_defaults = base_defaults or {}
 
     print("\n➡️  Add a new application")
     r["University"] = input_def("University", base_defaults.get("University",""))
@@ -162,7 +156,6 @@ def add_new_row(rows, base_defaults=None):
     r["Notes"]           = input_def("Notes (optional)", "")
     r["Last update"]     = now_iso()
 
-    #saves record to memory and file
     rows.append(r)
     save_rows(rows)
     print(f"✅ Added: {fmt_row_line(r)}")
@@ -174,7 +167,6 @@ def update_status_flow(rows, candidates):
     for r in candidates:
         print("   ", fmt_row_line(r))
 
-    #ask which record ID to update
     target_id = input_def("Enter the ID to update", candidates[0]["id"])
     target = None
     for r in rows:
@@ -184,24 +176,22 @@ def update_status_flow(rows, candidates):
         print("❌ ID not found. Abort.")
         return
 
-    #ask for new values
     print("Status options:", ", ".join(STATUS_CHOICES))
     new_status   = input_def(f"New status (current: {target.get('Status','')})", target.get("Status",""))
     new_deadline = input_def(f"New deadline YYYY-MM-DD (current: {target.get('Deadline','')})", target.get("Deadline",""))
     add_note     = input_def("Append note (optional)", "")
 
-    #update fields if user provded new values
     if new_status:   target["Status"] = new_status
     if new_deadline: target["Deadline"] = new_deadline
     if add_note:
         target["Notes"] = (target.get("Notes","") + (" | " if target.get("Notes") else "") + add_note)
 
-    target["Last update"] = now_iso() #update timestamp
+    target["Last update"] = now_iso() 
     save_rows(rows) #save to file
     print("✅ Updated:", fmt_row_line(target))
 
 def main():
-    rows = load_rows() #load existing data from csv
+    rows = load_rows()
 
     print("🎓 University Track Application")
     print("Press Ctrl+C or leave 'University' empty to quit.")
@@ -212,7 +202,6 @@ def main():
             if not uni:
                 print("\nBye!"); break
 
-            # Early fields for duplicate check
             program = input_def("Program", "")
             degree  = input_def("Degree", "")
             term    = input_def("Term", "")
@@ -242,7 +231,6 @@ def main():
                     print("↩ Skipped.")
                 continue
 
-            # No exact duplicate; reuse defaults from same uni if available
             base = {}
             if same_uni:
                 print("\nℹ️  Existing records for this university:")
@@ -262,7 +250,6 @@ def main():
 
             added = add_new_row(rows, base_defaults=base)
 
-            # Ensure early fields are set
             if program and not added.get("Program"): added["Program"] = program
             if degree  and not added.get("Degree"):  added["Degree"]  = degree
             if term    and not added.get("Term"):    added["Term"]    = term
