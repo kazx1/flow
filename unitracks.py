@@ -8,7 +8,7 @@ Interactive University/College Application Tracker (USD base)
     [U]pdate status
     [N]ew course on same university/college
     [S]kip
-- Stores rows in myuniversity.csv (or UNI_TRACKER_CSV env)
+- Stores rows in myuniversity.csv (or uniapplications env)
 - All costs assumed/displayed in USD ($)
 
 Run: python uni_tracker_interactive.py
