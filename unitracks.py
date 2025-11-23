@@ -1,6 +1,6 @@
 
 """
-Interactive University/College Application Tracker (USD base)
+Interactive University Application Tracker (USD)
 
 - Prompts for fields on launch
 - Detects duplicates (same University + Program + Degree + Term)
@@ -9,7 +9,7 @@ Interactive University/College Application Tracker (USD base)
     [N]ew course on same university/college
     [S]kip
 - Stores rows in myuniversity.csv (or uniapplications env)
-- All costs assumed/displayed in USD ($)
+- All costs showed in USD ($)
 
 Run: python unitracks.py
 """
@@ -75,7 +75,7 @@ def parse_money(x: str) -> float:
         return 0.0
 
 def usd(v: str | float) -> str:
-    """Format a number as USD string: $12,345.67."""
+    """Format a number as USD string like $12,345.67"""
     try:
         f = float(v)
         return f"${f:,.2f}" 
@@ -124,7 +124,7 @@ def compute_estimate(tuition, living, scholarship):
     return max(0.0, tuition + living - scholarship)
 
 def add_new_row(rows, base_defaults=None):
-    """Create a brand-new row (optionally prefill some fields)."""
+    """Create a new row"""
     r = {k:"" for k in FIELDS}
     r["id"] = next_id(rows)
     base_defaults = base_defaults or {}
@@ -162,7 +162,7 @@ def add_new_row(rows, base_defaults=None):
     return r
 
 def update_status_flow(rows, candidates):
-    """Pick one candidate by ID and update its status (and optionally deadline/notes)."""
+    """Pick a candidate ID & update his status"""
     print("\n📝 Matching records:")
     for r in candidates:
         print("   ", fmt_row_line(r))
@@ -171,7 +171,7 @@ def update_status_flow(rows, candidates):
     target = None
     for r in rows:
         if r.get("id")==target_id:
-            target = r; break #stop when found
+            target = r; break
     if not target:
         print("❌ ID not found. Abort.")
         return
