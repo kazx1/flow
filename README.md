@@ -14,11 +14,10 @@ Flow is designed for students, who want to save time through automation without 
 
 > Merges multiple PDF files into one
 
-> Creates compressed backups with timestamps
+> Compress & resize pictures to make it ready to share it
 
 > Share Wifi Qr Code 
 
 > Converts between CSV and Excel formats interactively
 
-> Compress folders to share it
-
+> Let you compress your folder in Documents path
