@@ -11,7 +11,7 @@ Interactive University/College Application Tracker (USD base)
 - Stores rows in myuniversity.csv (or uniapplications env)
 - All costs assumed/displayed in USD ($)
 
-Run: python uni_tracker_interactive.py
+Run: python unitracks.py
 """
 
 import csv, os, datetime as dt
