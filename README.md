@@ -20,5 +20,5 @@ Flow is designed for students, who want to save time through automation without 
 
 > Converts between CSV and Excel formats interactively
 
-> Cleans text files by removing duplicates or empty lines
+> Compress folders to share it
 
